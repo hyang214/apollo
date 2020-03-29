@@ -3,6 +3,9 @@ package com.ctrip.framework.apollo.core.enums;
 import com.google.common.base.Preconditions;
 
 /**
+ * 全部环境配置
+ * + 如果需要新增环境，可以在这个理加上
+ *
  * Here is the brief description for all the predefined environments:
  * <ul>
  *   <li>LOCAL: Local Development environment, assume you are working at the beach with no network access</li>

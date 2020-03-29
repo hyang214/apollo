@@ -7,14 +7,29 @@ import java.util.Map;
  */
 public class ApolloConfig {
 
+  /**
+   * 应用id
+   */
   private String appId;
 
+  /**
+   * 集群
+   */
   private String cluster;
 
+  /**
+   * 命名空间
+   */
   private String namespaceName;
 
+  /**
+   * 配置ky
+   */
   private Map<String, String> configurations;
 
+  /**
+   * 发布版本号
+   */
   private String releaseKey;
 
   public ApolloConfig() {

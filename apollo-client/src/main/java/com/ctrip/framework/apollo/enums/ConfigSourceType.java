@@ -1,12 +1,22 @@
 package com.ctrip.framework.apollo.enums;
 
 /**
+ * 配置来源枚举
+ *
  * To indicate the config's source type, i.e. where is the config loaded from
  *
  * @since 1.1.0
  */
 public enum ConfigSourceType {
-  REMOTE("Loaded from remote config service"), LOCAL("Loaded from local cache"), NONE("Load failed");
+
+  /**
+   * 远程服务
+   * 本地文件
+   * 失败
+   */
+  REMOTE("Loaded from remote config service"),
+  LOCAL("Loaded from local cache"),
+  NONE("Load failed");
 
   private final String description;
 

@@ -4,6 +4,8 @@ import com.ctrip.framework.apollo.core.enums.ConfigFileFormat;
 import com.ctrip.framework.apollo.enums.ConfigSourceType;
 
 /**
+ * 定义了本地缓存文件的接口
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public interface ConfigFile {

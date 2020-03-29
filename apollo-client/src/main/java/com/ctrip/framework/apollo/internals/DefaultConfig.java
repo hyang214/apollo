@@ -26,6 +26,8 @@ import com.google.common.util.concurrent.RateLimiter;
 
 
 /**
+ * 默认配置
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public class DefaultConfig extends AbstractConfig implements RepositoryChangeListener {

@@ -17,32 +17,110 @@ import com.ctrip.framework.foundation.Foundation;
 import com.google.common.base.Strings;
 
 /**
+ * 配置工具，apollo本身的配置
  * @author Jason Song(song_s@ctrip.com)
  */
 public class ConfigUtil {
 
+  /**
+   * 日志
+   */
   private static final Logger logger = LoggerFactory.getLogger(ConfigUtil.class);
+
+  /**
+   * 刷新间隔
+   */
   private int refreshInterval = 5;
+
+  /**
+   * 刷新时间间隔单位
+   */
   private TimeUnit refreshIntervalTimeUnit = TimeUnit.MINUTES;
-  private int connectTimeout = 1000; //1 second
-  private int readTimeout = 5000; //5 seconds
+
+  /**
+   * 连接超时时间
+   * 默认1s
+   */
+  private int connectTimeout = 1000;
+
+  /**
+   * 读取数据超时时间
+   * 默认5s
+   */
+  private int readTimeout = 5000;
+
+  /**
+   * 集群名称
+   */
   private String cluster;
-  private int loadConfigQPS = 2; //2 times per second
-  private int longPollQPS = 2; //2 times per second
-  //for on error retry
-  private long onErrorRetryInterval = 1;//1 second
-  private TimeUnit onErrorRetryIntervalTimeUnit = TimeUnit.SECONDS;//1 second
-  //for typed config cache of parser result, e.g. integer, double, long, etc.
-  private long maxConfigCacheSize = 500;//500 cache key
-  private long configCacheExpireTime = 1;//1 minute
-  private TimeUnit configCacheExpireTimeUnit = TimeUnit.MINUTES;//1 minute
-  private long longPollingInitialDelayInMills = 2000;//2 seconds
+
+  /**
+   * 配置加载qps
+   * 默认一秒2次
+   */
+  private int loadConfigQPS = 2;
+  /**
+   * 长轮询qps
+   * 默认一秒2次
+   */
+  private int longPollQPS = 2;
+
+  /**
+   * 出现错误，重试时间间隔
+   */
+  private long onErrorRetryInterval = 1;
+
+  /**
+   * 出现错误，重试时间间隔单位
+   * 默认 秒
+   */
+  private TimeUnit onErrorRetryIntervalTimeUnit = TimeUnit.SECONDS;
+
+  /**
+   * for typed config cache of parser result, e.g. integer, double, long, etc.
+   * 最大配置数目
+   */
+  private long maxConfigCacheSize = 500;
+
+  /**
+   * 配置过期时间
+   */
+  private long configCacheExpireTime = 1;
+
+  /**
+   * 配置过期时间单位
+   */
+  private TimeUnit configCacheExpireTimeUnit = TimeUnit.MINUTES;
+
+  /**
+   * 长轮询初始delay时间间隔，毫秒
+   */
+  private long longPollingInitialDelayInMills = 2000;
+
+  /**
+   * 自动更新spring注入的变量
+   * 默认 true
+   */
   private boolean autoUpdateInjectedSpringProperties = true;
+
+  /**
+   * 报警日志限流
+   */
   private final RateLimiter warnLogRateLimiter;
+
+  /**
+   * Configuration to keep properties order as same as line order in .yml/.yaml/.properties file.
+   */
   private boolean propertiesOrdered = false;
 
   public ConfigUtil() {
-    warnLogRateLimiter = RateLimiter.create(0.017); // 1 warning log output per minute
+    /**
+     * 1 warning log output per minute
+     */
+    warnLogRateLimiter = RateLimiter.create(0.017);
+    /**
+     * 通过上下文拉取对应的配置
+     */
     initRefreshInterval();
     initConnectTimeout();
     initReadTimeout();
@@ -90,15 +168,21 @@ public class ConfigUtil {
   }
 
   private void initCluster() {
-    //Load data center from system property
+    /**
+     * Load data center from system property
+     */
     cluster = System.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY);
 
-    //Use data center as cluster
+    /**
+     * Use data center as cluster
+     */
     if (Strings.isNullOrEmpty(cluster)) {
       cluster = getDataCenter();
     }
 
-    //Use default cluster
+    /**
+     * Use default cluster
+     */
     if (Strings.isNullOrEmpty(cluster)) {
       cluster = ConfigConsts.CLUSTER_NAME_DEFAULT;
     }
@@ -114,6 +198,7 @@ public class ConfigUtil {
   }
 
   /**
+   * 获取当前环境
    * Get the current environment.
    *
    * @return the env, UNKNOWN if env is not set or invalid

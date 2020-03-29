@@ -3,6 +3,8 @@ package com.ctrip.framework.apollo;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 
 /**
+ * 定义了配置变化响应接口
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public interface ConfigChangeListener {

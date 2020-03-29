@@ -1,6 +1,8 @@
 package com.ctrip.framework.apollo.spi;
 
 /**
+ * 定义了配置文件注册接口
+ *
  * The manually config registry, use with caution!
  *
  * @author Jason Song(song_s@ctrip.com)

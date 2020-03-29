@@ -8,6 +8,8 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
+ * 定义了配置使用接口
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public interface Config {

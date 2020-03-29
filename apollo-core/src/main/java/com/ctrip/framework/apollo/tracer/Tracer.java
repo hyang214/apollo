@@ -10,10 +10,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 日志打印工具
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public abstract class Tracer {
+
+  /**
+   * 获取slf4j的logger
+   */
   private static final Logger logger = LoggerFactory.getLogger(Tracer.class);
+
+  /**
+   *
+   */
   private static final MessageProducerManager NULL_MESSAGE_PRODUCER_MANAGER =
       new NullMessageProducerManager();
   private static volatile MessageProducerManager producerManager;

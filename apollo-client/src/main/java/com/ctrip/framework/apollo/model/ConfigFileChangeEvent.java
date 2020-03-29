@@ -3,12 +3,27 @@ package com.ctrip.framework.apollo.model;
 import com.ctrip.framework.apollo.enums.PropertyChangeType;
 
 /**
+ * 配置文件变更事件
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public class ConfigFileChangeEvent {
+
+  /**
+   * 命名空间
+   */
   private final String namespace;
+  /**
+   * 旧的值
+   */
   private final String oldValue;
+  /**
+   * 新的值
+   */
   private final String newValue;
+  /**
+   * 变更事件
+   */
   private final PropertyChangeType changeType;
 
   /**

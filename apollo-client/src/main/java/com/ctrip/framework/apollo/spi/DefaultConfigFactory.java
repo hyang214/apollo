@@ -23,25 +23,55 @@ import com.ctrip.framework.apollo.internals.YmlConfigFile;
 import com.ctrip.framework.apollo.util.ConfigUtil;
 
 /**
+ * 默认配置工厂
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public class DefaultConfigFactory implements ConfigFactory {
+
+  /**
+   * logger
+   */
   private static final Logger logger = LoggerFactory.getLogger(DefaultConfigFactory.class);
+
+  /**
+   * 配置工具
+   */
   private ConfigUtil m_configUtil;
 
+  /**
+   * 初始化
+   * + 通过ApolloInjector注入apollo本身的配置信息
+   */
   public DefaultConfigFactory() {
     m_configUtil = ApolloInjector.getInstance(ConfigUtil.class);
   }
 
+  /**
+   * 根据命名空间，创建对应的配置
+   * + 根据命名空间。获取文件格式
+   * + 根据格式，决定创建方式不同
+   *
+   * @param namespace the namespace，非properties格式，必然带上格式
+   * @return
+   */
   @Override
   public Config create(String namespace) {
+    /** 获取配置格式，无后缀名，即properties格式 **/
     ConfigFileFormat format = determineFileFormat(namespace);
     if (ConfigFileFormat.isPropertiesCompatible(format)) {
       return new DefaultConfig(namespace, createPropertiesCompatibleFileConfigRepository(namespace, format));
     }
+    /** 大部分走该分支，包括properties **/
     return new DefaultConfig(namespace, createLocalConfigRepository(namespace));
   }
 
+  /**
+   * 根据命名空间+文件格式，创建对应的配置
+   * @param namespace the namespace
+   * @param configFileFormat
+   * @return
+   */
   @Override
   public ConfigFile createConfigFile(String namespace, ConfigFileFormat configFileFormat) {
     ConfigRepository configRepository = createLocalConfigRepository(namespace);
@@ -63,16 +93,30 @@ public class DefaultConfigFactory implements ConfigFactory {
     return null;
   }
 
+  /**
+   * 本地配置repository
+   * +
+   * @param namespace
+   * @return
+   */
   LocalFileConfigRepository createLocalConfigRepository(String namespace) {
+    /** 通过配置工具，判断是否是本地模式 **/
     if (m_configUtil.isInLocalMode()) {
+      /** 本地模式不拉取数据 **/
       logger.warn(
           "==== Apollo is in local mode! Won't pull configs from remote server for namespace {} ! ====",
           namespace);
       return new LocalFileConfigRepository(namespace);
     }
+    /** 正常模式，指定远程配置源 **/
     return new LocalFileConfigRepository(namespace, createRemoteConfigRepository(namespace));
   }
 
+  /**
+   * 创建远程配置源
+   * @param namespace
+   * @return
+   */
   RemoteConfigRepository createRemoteConfigRepository(String namespace) {
     return new RemoteConfigRepository(namespace);
   }
@@ -86,7 +130,11 @@ public class DefaultConfigFactory implements ConfigFactory {
     return new PropertiesCompatibleFileConfigRepository(configFile);
   }
 
-  // for namespaces whose format are not properties, the file extension must be present, e.g. application.yaml
+  /**
+   * for namespaces whose format are not properties, the file extension must be present, e.g. application.yaml
+   * @param namespaceName
+   * @return
+   */
   ConfigFileFormat determineFileFormat(String namespaceName) {
     String lowerCase = namespaceName.toLowerCase();
     for (ConfigFileFormat format : ConfigFileFormat.values()) {
